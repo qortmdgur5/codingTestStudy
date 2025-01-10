@@ -2,6 +2,7 @@ package programers.level1;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 
 public class Solution {
     // 프로그래머스 Level 1 동영상 편집기 문제
@@ -47,6 +48,7 @@ public class Solution {
         return t_answer.format(formatterMinutesSeconds);
     }
 
+    // 프로그래머스 Level 1 지갑에 지폐 넣기 문제
     public int solution2(int[] wallet, int[] bill) {
         int answer = 0;
 
@@ -74,4 +76,48 @@ public class Solution {
         }
         return answer;
     }
+
+    // 프로그래머스 Level 1 돗자리 펴기 문제
+    public class Solution3 {
+        public int solution(int[] mats, String[][] park) {
+            Arrays.sort(mats); // 돗자리 크기 정렬 (작은 순서)
+            int parkHeight = park.length;
+            int parkWidth = park[0].length;
+
+            // 큰 돗자리부터 가능한지 검사
+            for (int matSize = mats.length - 1; matSize >= 0; matSize--) {
+                int size = mats[matSize];
+                if (canPlaceMat(size, park, parkHeight, parkWidth)) {
+                    return size; // 가장 큰 돗자리 크기 반환
+                }
+            }
+            return -1; // 아무 돗자리도 놓을 수 없을 경우
+        }
+
+        private boolean canPlaceMat(int size, String[][] park, int height, int width) {
+            // 공원 내 모든 시작 좌표 (i, j) 탐색
+            for (int i = 0; i <= height - size; i++) {
+                for (int j = 0; j <= width - size; j++) {
+                    if (isEmptyArea(i, j, size, park)) {
+                        return true; // 빈 공간 발견
+                    }
+                }
+            }
+            return false; // 빈 공간 없음
+        }
+
+        private boolean isEmptyArea(int row, int col, int size, String[][] park) {
+            // 해당 크기 영역이 전부 빈자리인지 검사
+            for (int i = row; i < row + size; i++) {
+                for (int j = col; j < col + size; j++) {
+                    if (!park[i][j].equals("-1")) {
+                        return false; // 빈자리가 아닌 곳 발견
+                    }
+                }
+            }
+            return true;
+        }
+    }
+
+
 }

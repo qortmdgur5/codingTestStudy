@@ -119,5 +119,52 @@ public class Solution {
         }
     }
 
+    // 프로그래머스 Level 1 붕대감기 공격 문제
+    public static class Solution4 {
+        public int solution(int[] bandage, int health, int[][] attacks) {
+            int maxHealth = health;
+            int skillTime = bandage[0];     // 추가 체력 가능 시간
+            int healPerSecond = bandage[1];
+            int extraHeal = bandage[2];
 
+            int currentTime = 0;  // 현재 시간
+
+            for (int[] attack : attacks) {
+                int attackTime = attack[0];
+                int damage = attack[1];
+
+                // 기술 사용 가능 시간 계산
+                int availableTime = attackTime - currentTime - 1;
+                if (availableTime > 0) {
+                    // 붕대 기술 사용
+                    health = useBandage(maxHealth, health, availableTime, skillTime, healPerSecond, extraHeal);
+                }
+
+                // 몬스터 공격 처리
+                health -= damage;
+                if (health <= 0) {
+                    return -1;
+                }
+
+                // 현재 시간을 공격 시간으로 업데이트
+                currentTime = attackTime;
+            }
+
+            return health;
+        }
+
+        private int useBandage(int maxHealth, int health, int availableTime, int skillTime, int healPerSecond, int extraHeal) {
+            // 초당 회복량 적용
+            health += healPerSecond * availableTime;
+
+            // 기술 완전 시전 성공 시 추가 회복
+            if (availableTime >= skillTime) {
+                int extraHealCount = availableTime/skillTime;   // 추가체력 회복 횟수
+                health += extraHeal * extraHealCount;
+            }
+
+            // 최대 체력 초과 방지
+            return Math.min(health, maxHealth);
+        }
+    }
 }

@@ -87,4 +87,27 @@ class SolutionTest {
         // 결과가 예상한 결과와 일치하는지 확인
         assertArrayEquals(expected, result);
     }
+
+    @Test
+    void testSolution10() {
+        Solution.Solution10 solution10 = new Solution.Solution10();
+
+        // 첫 번째 테스트 케이스
+        String[] park1 = {"SOO", "OOO", "OOO"};
+        String[] routes1 = {"E 2", "S 2", "W 1"};
+        int[] result1 = solution10.solution(park1, routes1);
+        System.out.println("Test Case 1: " + (result1[0] == 2 && result1[1] == 1 ? "Passed" : "Failed"));
+
+        // 두 번째 테스트 케이스
+        String[] park2 = {"SOO", "OXX", "OOO"};
+        String[] routes2 = {"E 2", "S 2", "W 1"};
+        int[] result2 = solution10.solution(park2, routes2);
+        System.out.println("Test Case 2: " + (result2[0] == 0 && result2[1] == 1 ? "Passed" : "Failed"));
+
+        // 세 번째 테스트 케이스
+        String[] park3 = {"OSO", "OOO", "OXO", "OOO"};
+        String[] routes3 = {"E 2", "S 3", "W 1"};
+        int[] result3 = solution10.solution(park3, routes3);
+        System.out.println("Test Case 3: " + (result3[0] == 0 && result3[1] == 0 ? "Passed" : "Failed"));
+    }
 }

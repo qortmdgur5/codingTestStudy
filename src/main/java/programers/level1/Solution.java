@@ -404,4 +404,91 @@ public class Solution {
             return answer.stream().mapToInt(Integer::intValue).toArray();
         }
     }
+
+    // 프로그래머스 level 1 공원 산책 문제
+    public static class Solution10{
+        public int[] solution(String[] park, String[] routes) {
+            // park 는 직사각형 공원
+            // routes = 방향 공백 거리 로 구분된다
+            // 마지막 도착 좌표를 구하세요
+
+            int width = park[0].length();   // 공원 가로 길이
+            int height = park.length;       // 공원 세로 길이
+
+            // 2차원 배열로 먼저 바꿔야겠다
+            String[][] coordinate = new String[height][width];
+            int[] start = new int[2];
+            for(int i = 0; i < height; i++){
+                // park 각 row 마다 반복
+                for(int j = 0; j < width; j++){
+                    // 각 row element 마다 반복
+                    // 좌표 별 element 담았음.
+                    coordinate[i][j] = String.valueOf(park[i].charAt(j));
+
+                    if(String.valueOf(park[i].charAt(j)).equals("S")){
+                        // 스타팅 포인트 지점이라면
+                        start[0] = i;
+                        start[1] = j;
+                    }
+                }
+            }
+
+            for(String route : routes){
+                // 모든 명령어에 대해 반복
+                String[] part = route.split(" ");
+                String direction = part[0];
+                int distance = Integer.parseInt(part[1]);
+
+                start = move(coordinate, start, distance, direction, width, height);
+            }
+
+            return start;
+        }
+
+        private int[] move(String[][] coordinate, int[] cur, int distance, String direction, int width, int height){
+            // 현재 좌표
+            int x = cur[0];  // 현재 x좌표
+            int y = cur[1];  // 현재 y좌표
+
+            // 이동 가능 여부를 체크
+            boolean isMove = true;
+
+            // 이동할 방향에 따라 처리
+            for (int i = 0; i < distance; i++) {
+                if (direction.equals("E")) {  // 동쪽
+                    if (y + 1 >= width || coordinate[x][y + 1].equals("X")) {
+                        isMove = false;  // 장애물이 있거나 공원 범위를 벗어났다면
+                        break;
+                    }
+                    y += 1;  // y좌표 이동
+                } else if (direction.equals("S")) {  // 남쪽
+                    if (x + 1 >= height || coordinate[x + 1][y].equals("X")) {
+                        isMove = false;
+                        break;
+                    }
+                    x += 1;  // x좌표 이동
+                } else if (direction.equals("W")) {  // 서쪽
+                    if (y - 1 < 0 || coordinate[x][y - 1].equals("X")) {
+                        isMove = false;
+                        break;
+                    }
+                    y -= 1;  // y좌표 이동
+                } else if (direction.equals("N")) {  // 북쪽
+                    if (x - 1 < 0 || coordinate[x - 1][y].equals("X")) {
+                        isMove = false;
+                        break;
+                    }
+                    x -= 1;  // x좌표 이동
+                }
+            }
+
+            // 이동이 가능하면 이동된 좌표를 반환
+            if (isMove) {
+                cur[0] = x;
+                cur[1] = y;
+            }
+
+            return cur;
+        }
+    }
 }

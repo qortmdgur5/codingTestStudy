@@ -290,4 +290,59 @@ public class Solution {
             return colorCount;
         }
     }
+
+    // 프로그래머스 level 1 데이터 분석 문제
+    public class Solution7{
+        public int[][] solution(int[][] data, String ext, int val_ext, String sort_by) {
+            // data = ["코드 번호(code)", "제조일(date)", "최대 수량(maximum)", "현재 수량(remain)"]
+            // ext < val_ext 조건에서 sort_by 에 해당하는 조건값으로 오름차순 정렬
+            // ext = "code", "date", "maximum", "remain" 중 하나
+
+            int dataCondition = 0;
+            switch (ext) {
+                case "code":
+                    dataCondition = 0;
+                    break;
+                case "date":
+                    dataCondition = 1;
+                    break;
+                case "maximum":
+                    dataCondition = 2;
+                    break;
+                default:
+                    dataCondition = 3;
+                    break;
+            }
+
+            int sortCondition;
+            switch (sort_by) {
+                case "code":
+                    sortCondition = 0;
+                    break;
+                case "date":
+                    sortCondition = 1;
+                    break;
+                case "maximum":
+                    sortCondition = 2;
+                    break;
+                default:
+                    sortCondition = 3;
+                    break;
+            }
+
+            List<int[]> filterDataByExt = new ArrayList<>();
+
+            for(int[] datas : data){
+                if(datas[dataCondition] < val_ext){
+                    filterDataByExt.add(datas);
+                }
+            }
+
+            // filterDataByExt 리스트를 sortCondition 번째 요소를 기준으로 오름차순 정렬
+            Collections.sort(filterDataByExt, Comparator.comparingInt(a -> a[sortCondition]));
+
+            // List<int[]>를 int[][] 배열로 변환하여 반환
+            return filterDataByExt.toArray(new int[filterDataByExt.size()][]);
+        }
+    }
 }

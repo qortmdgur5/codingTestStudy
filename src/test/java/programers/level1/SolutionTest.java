@@ -47,4 +47,29 @@ class SolutionTest {
                 {1, 2}, {3, 2}
         }));
     }
+
+    @Test
+    void testSolution5() {
+        Solution.Solution5 solution5 = new Solution.Solution5();
+
+        // 테스트 케이스 1
+        assertEquals(2, solution5.solution(
+                new String[]{"muzi", "ryan", "frodo", "neo"},
+                new String[]{"muzi frodo", "muzi frodo", "ryan muzi", "ryan muzi",
+                        "ryan muzi", "frodo muzi", "frodo ryan", "neo muzi"}
+        ));
+
+        // 테스트 케이스 2
+        assertEquals(4, solution5.solution(
+                new String[]{"joy", "brad", "alessandro", "conan", "david"},
+                new String[]{"alessandro brad", "alessandro joy", "alessandro conan",
+                        "david alessandro", "alessandro david"}
+        ));
+
+        // 테스트 케이스 3
+        assertEquals(0, solution5.solution(
+                new String[]{"a", "b", "c"},
+                new String[]{"a b", "b a", "c a", "a c", "a c", "c a"}
+        ));
+    }
 }

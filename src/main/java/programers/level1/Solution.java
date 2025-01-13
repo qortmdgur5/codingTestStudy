@@ -3,6 +3,8 @@ package programers.level1;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Solution {
     // 프로그래머스 Level 1 동영상 편집기 문제
@@ -165,6 +167,96 @@ public class Solution {
 
             // 최대 체력 초과 방지
             return Math.min(health, maxHealth);
+        }
+    }
+
+    // 프로그래머스 level 1 가장많이 받은 선물 문제 - 카카오톡
+    public static class Solution5 {
+        public int solution(String[] friends, String[] gifts) {
+            // 두 사람이 선물을 주고받았으면 더 많은 선물을 준 사람이 다음달에 선물을 1개 받음
+            // 선물지수 = 이번달의 준 선물 - 받은 선물  즉, 준 선물이 더 많을수록 높음
+            // 서로 주고받은게 같으면 = 선물지수가 낮은 사람이 선물지수가 높은 사람에게 선물을 줌
+            // 선물지수도 같고 서로 선물한적도 없으면 다음달에 선물을 주고받지 않음
+            // 다음달에 선물을 가장 많이 받을 친구의 받을 선물수를 알고 싶음
+            // gifts 공백으로 구분하며 A 선물을 준 친구   B 선물을 받은 친구
+            // 개인 선물지수 계산 Map 에 담고
+            // 주고받았으면 더 준놈이 하나 더 받고
+            // 없거나 같으면 선물지수가 높은놈이 하나 더 받고
+            // 해당 사용자가 다음달에 받을 선물갯수만 계산해서 리턴
+
+            // 주고 받은 횟수 기록 Map 선언
+            Map<String, Integer> giveGiftCount = new HashMap<>();
+            Map<String, Integer> receiveGiftCount = new HashMap<>();
+
+            // 선물 주고받은 횟수 Map 초기화
+            for(String friend : friends){
+                giveGiftCount.put(friend, 0);
+                receiveGiftCount.put(friend, 0);
+            }
+
+            // 서로 선물 주고받은 관계 Map
+            Map<String, Map<String, Integer>> giftRelation = new HashMap<>();
+            for(String friend : friends){
+                giftRelation.put(friend, new HashMap<>());
+            }
+
+            // 선물 주고받은 횟수 기록
+            for(String gift : gifts){
+                String[] parts = gift.split(" ");
+                String giver = parts[0];
+                String receiver = parts[1];
+
+                // 선물지수 계산을 위한 전체 몇개 줬고 받았는지
+                giveGiftCount.put(giver, giveGiftCount.get(giver) + 1);
+                receiveGiftCount.put(receiver, receiveGiftCount.get(receiver) + 1);
+
+                // 선물을 준 사람이 누구에게 몇번 줬는지 Map<giver, Map<receiver, count>>
+                giftRelation.get(giver).put(receiver, giftRelation.get(giver).getOrDefault(receiver, 0) +1);
+            }
+
+            // 선물 지수 계산
+            Map<String, Integer> giftCount = new HashMap<>();
+            for(String friend : friends){
+                int giftScore = giveGiftCount.get(friend) - receiveGiftCount.get(friend);
+                giftCount.put(friend, giftScore);
+            }
+
+            // 다음달 받을 선물 계산
+            Map<String, Integer> nextMonthGift = new HashMap<>();
+            for(String giver : friends){
+                // 모든 친구들에 대해 반복
+                nextMonthGift.put(giver, 0);   // 다음달 받을 선물 Map 초기화
+                for(String receiver : friends){
+                    // 상대방과 선물지수 및 선물관계 파악
+                    if(!giver.equals(receiver)){
+                        // 본인이 아닌 경우만 파악
+                        // 상대방과 주고받은 관계가 있으면, 더 많이 줬을때 하나를 받고
+                        // 상대방과 내꺼를 - 했을때 0 이면 선물지수로 판별
+                        int giveCountToReceiver = giftRelation.get(giver).getOrDefault(receiver, 0);
+                        int giveCountFromReceiver = giftRelation.get(receiver).getOrDefault(giver, 0);
+                        if((giveCountToReceiver - giveCountFromReceiver) != 0){
+                            if((giveCountToReceiver - giveCountFromReceiver) > 0){
+                                // 본인이 더 많이 줬으면 반대조건은 하지않음. 모든 친구들에 초기반복문을 돌리면 상대방꺼는 그떄 +1 될테니까 여기서 해주면 중복 더하기임
+                                nextMonthGift.put(giver, nextMonthGift.get(giver) + 1);
+                            }
+                        }else{
+                            // 서로 선물한 관계가 없거나 같은 갯수를 선물했을 떄 선물지수로 판별
+                            if(giftCount.get(giver) > giftCount.get(receiver)){
+                                // 본인이 선물지수가 더 높으면
+                                nextMonthGift.put(giver, nextMonthGift.get(giver) + 1);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 가장 많은 선물을 받은 친구의 선물 수 리턴
+            int maxReceive = 0;
+            for(int receives : nextMonthGift.values()){
+                maxReceive = Math.max(maxReceive, receives);
+            }
+
+            return maxReceive;
         }
     }
 }

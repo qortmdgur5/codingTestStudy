@@ -375,4 +375,33 @@ public class Solution {
             return players;
         }
     }
+
+    // 프로그래머스 level 1 추억 점수 문제
+    public class Solution9{
+        public int[] solution(String[] name, int[] yearning, String[][] photo) {
+            // name 사람의 이름 배열
+            // yearning 각 name index 의 사람 별 그리움 점수
+            // photo 는 사진에 찍힌 인물의 이름을 담은 함수
+
+            Map<String, Integer> yearningMap = new HashMap<>();
+
+            // 각 사람 별 그리움 점수 Map
+            for(int i = 0; i < name.length; i++){
+                yearningMap.put(name[i], yearning[i]);
+            }
+
+            List<Integer> answer = new ArrayList<>();
+
+            for(String[] row : photo){
+                // 각 사진들 마다 반복문을 돌리고
+                int photoScore = 0;
+                for (String element : row) {
+                    // 등장인물이 그리움 점수에 있는 경우 점수 합산
+                    photoScore += yearningMap.getOrDefault(element, 0);
+                }
+                answer.add(photoScore);
+            }
+            return answer.stream().mapToInt(Integer::intValue).toArray();
+        }
+    }
 }

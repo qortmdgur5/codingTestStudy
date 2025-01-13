@@ -2,9 +2,7 @@ package programers.level1;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Solution {
     // 프로그래머스 Level 1 동영상 편집기 문제
@@ -257,6 +255,39 @@ public class Solution {
             }
 
             return maxReceive;
+        }
+    }
+
+    // 프로그래머스 level 1 이웃한 칸 문제
+    public static class Solution6 {
+        public int solution(String[][] board, int h, int w) {
+            // 각 칸마다 색이 칠해진 2차원 격자 보드판이 있음.
+            // 칸을 골랐을 때 같은 색깔로 칠해진 칸의 이웃한 칸의 갯수를 구함
+            // board[h][w] = String 으로 색깔 값이 들어가 있음
+            // board 는 정사각형
+
+            int boardLength = board.length; // 보드칸 길이
+
+            String color = board[h][w];     // 해당 보드칸 색깔
+
+            int colorCount = 0;             // 같은 색깔 보드칸 수
+
+            int[] rowList = {-1, 1, 0, 0};
+            int[] colList = {0, 0, -1, 1};
+
+            // 좌 우 위 아래 를 체크하려면 [h-1][w], [h+1][w], [h][w-1], [h][w+1] 체크
+            for(int i = 0; i < 4; i++){
+                int newRow = h + rowList[i];
+                int newCol = w + colList[i];
+
+                if(newRow >= 0 && newRow < boardLength && newCol >= 0 && newCol < boardLength){
+                    if(board[newRow][newCol].equals(color)){
+                        colorCount++;
+                    }
+                }
+            }
+
+            return colorCount;
         }
     }
 }

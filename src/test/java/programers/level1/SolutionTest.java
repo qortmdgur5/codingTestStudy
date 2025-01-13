@@ -72,4 +72,19 @@ class SolutionTest {
                 new String[]{"a b", "b a", "c a", "a c", "a c", "c a"}
         ));
     }
+
+    @Test
+    void testSolution8() {
+        Solution.Solution8 solution8 = new Solution.Solution8();
+
+        String[] players = {"mumu", "soe", "poe", "kai", "mine"};
+        String[] callings = {"kai", "kai", "mine", "mine"};
+        String[] expected = {"mumu", "kai", "mine", "soe", "poe"};
+
+        // solution 메서드 호출
+        String[] result = solution8.solution(players, callings);
+
+        // 결과가 예상한 결과와 일치하는지 확인
+        assertArrayEquals(expected, result);
+    }
 }

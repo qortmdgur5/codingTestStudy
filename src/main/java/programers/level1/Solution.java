@@ -345,4 +345,34 @@ public class Solution {
             return filterDataByExt.toArray(new int[filterDataByExt.size()][]);
         }
     }
+
+    // 프로그래머스 level 1 달리기 경주 문제
+    public static class Solution8{
+        public String[] solution(String[] players, String[] callings) {
+            // players 는 등수 순으로 플레이어 선수
+            // callings 는 해설진이 부르는 선수 순서
+
+            Map<String, Integer> playerMap = new HashMap<>();
+            for(int i = 0; i < players.length; i++){
+                playerMap.put(players[i], i);
+            }
+
+            for(String call : callings){
+                // 불린 선수 index
+                int callPlayerIdx = playerMap.get(call);
+                // 바로 앞 선수
+                String frontPlayer = players[callPlayerIdx - 1];
+
+                // 등수 체인지
+                players[callPlayerIdx] = frontPlayer;
+                players[callPlayerIdx - 1] = call;
+
+                // 인덱스도 초기화
+                playerMap.put(call, callPlayerIdx - 1);
+                playerMap.put(frontPlayer, callPlayerIdx);
+
+            }
+            return players;
+        }
+    }
 }

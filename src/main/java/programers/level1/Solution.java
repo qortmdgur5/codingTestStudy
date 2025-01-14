@@ -1,5 +1,6 @@
 package programers.level1;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -599,6 +600,71 @@ public class Solution {
             }
 
             return paintCount;
+        }
+    }
+
+    // 프로그래머스 2021 KAKAO BLIND RECRUITMENT 매출 하락 최소화 문제
+    public class Solution13{
+//        public int solution(int[] sales, int[][] links) {
+//            // 모든 팀은 최소 1명 이상의 직원을 워크숍에 참석
+//            // 워크숍에 참석하는 직원들의 하루평균 매출액의 합이 최소
+//            // sales 는 하루 평균 직원의 매출액 1번 직원부터 순서대로
+//            // links 배열의 크기는 sales 배열의 크기 - 1
+//            // 팀 파악은 파라미터로 불가능해 다른 연산을 해야하는데
+//            // 모든팀의 인원이 일단 워크숍에 참석해야하는게 필수
+//            // 일단 이거부터 가야해 모든팀의 인원이 최소 1명
+//            //
+//        }
+    }
+
+    // 프로그래머스 2023 KAKAO BLIND RECRUITMENT 개인정보 수집 유효기간 문제
+    public static class Solution14{
+        public int[] solution(String today, String[] terms, String[] privacies) {
+            // 개인정보 n 개가 존재
+            // 모든 달은 28일까지 있다고 가정
+            // today 는 오늘날짜를 의미 YYYY.MM.DD 형태 "2022.05.19"
+            // 약관의 유효기간을 담은 1차원 문자열 배열 terms
+            // 개인정보의 정보를 담은 1차원 문자열 배열 privacies
+            // 파기해야 할 개인정보의 번호를 오름차순으로 1차원 정수 배열에 담아 return
+            // privacies 에 있는게 약관동의 정보들. terms 는 그 들의 유효기간 정보
+            // 오늘 날짜 년 월 일 파악
+            // terms 에 유효기간은 일단 두고
+            // privacies 에 개인정보들이랑 terms 랑 일치하는거 있나 보고
+            // 그거랑 달수 파악해서 ㄱㄱ
+
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+            LocalDate todayDate = LocalDate.parse(today, dateTimeFormatter);
+
+            List<Integer> answer = new ArrayList<>();
+            Map<String, Integer> conditionMap = new HashMap<>();
+
+            for(String term : terms){
+                String[] termParts = term.split(" ");
+                String termName = termParts[0];
+                Integer termMonth = Integer.valueOf(termParts[1]);
+                conditionMap.put(termName, termMonth);
+            }
+
+            for(int i = 0; i < privacies.length; i++){
+                // 모든 개인 약관정보들에 대해 반복
+                String[] agreeParts = privacies[i].split(" ");
+                // 개인 약관 동의 날짜
+                LocalDate agreeDate = LocalDate.parse(agreeParts[0], dateTimeFormatter);
+                // 개인 동의 약관 명
+                String agreeName = agreeParts[1];
+
+                // 약관의 유효기간 달수
+                Integer termMonth = conditionMap.get(agreeName);
+                LocalDate expirationDate = agreeDate.plusMonths(termMonth);
+
+                // 만료 여부 확인
+                if (!expirationDate.isAfter(todayDate)) {
+                    answer.add(i + 1);  // 파기 대상 번호 추가
+                }
+
+            }
+
+            return answer.stream().mapToInt(Integer::intValue).toArray();
         }
     }
 }

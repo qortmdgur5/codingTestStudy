@@ -110,4 +110,29 @@ class SolutionTest {
         int[] result3 = solution10.solution(park3, routes3);
         System.out.println("Test Case 3: " + (result3[0] == 0 && result3[1] == 0 ? "Passed" : "Failed"));
     }
+
+    @Test
+    void testSolution11() {
+        Solution.Solution11 solution11 = new Solution.Solution11();
+
+        // 테스트 케이스
+        String[][] testCases = {
+                {".#...", "..#..", "...#."},
+                {"..........", ".....#....", "......##..", "...##.....", "....#....."},
+                {".##...##.", "#..#.#..#", "#...#...#", ".#.....#.", "..#...#..", "...#.#...", "....#...."},
+                {"..", "#."}
+        };
+        int[][] expectedResults = {
+                {0, 1, 3, 4},
+                {1, 3, 5, 8},
+                {0, 0, 7, 9},
+                {1, 0, 2, 1}
+        };
+
+        for (int i = 0; i < testCases.length; i++) {
+            int[] result = solution11.solution(testCases[i]);
+            System.out.println("Test Case " + (i + 1) + " Result: " + java.util.Arrays.toString(result) +
+                    " | Expected: " + java.util.Arrays.toString(expectedResults[i]));
+        }
+    }
 }

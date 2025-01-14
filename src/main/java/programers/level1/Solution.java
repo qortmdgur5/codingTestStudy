@@ -491,4 +491,52 @@ public class Solution {
             return cur;
         }
     }
+
+    // 프로그래머스 level 1 바탕화면 정리 문제
+    public static class Solution11{
+        public int[] solution(String[] wallpaper) {
+            // 바탕화면은 좌상단 0,0 기준 (세로, 가로)
+            // 빈칸은 . 파일이 있으면 #
+            // S(lux, luy) 드래그 선택 시작점
+            // E(rdx, rdy) 드래그 끝 점
+            // "드래그 한 거리"는 |rdx - lux| + |rdy - luy| 최솟값을 구해야 함
+            // [lux, luy, rdx, rdy]를 return
+            // wallpaper[i][j]는 i + 1행 j + 1열에 해당하는 칸의 상태
+            // 세로중 가장 위의 i, 가로 중 가장 왼쪽의 j 가 드래그 시작점
+            // 세로중 가장 밑의 i+1, 가로 중 가장 오른쪽의 j+1 가 드래그 끝점
+
+            int width = wallpaper[0].length();  // 가로 길이
+            int height = wallpaper.length;      // 세로 길이
+
+            int lux = 0;    // 시작점 x 좌표
+            int rdx = 0;    // 끝점 x 좌표
+            int luy = 0;    // 시작점 y 좌표
+            int rdy = 0;    // 끝점 y 좌표
+
+            List<Integer> yIndex = new ArrayList<>();
+            List<Integer> xIndex = new ArrayList<>();
+
+            for (int j = 0; j < height; j++){
+                // y 좌표 구하기 - 사실상 좌표 평면 x
+                for(int i = 0; i < width; i++){
+                    if(String.valueOf(wallpaper[j].charAt(i)).equals("#")){
+                        yIndex.add(i);
+                    }
+                }
+                // x 좌표 구하기 - 사실상 좌표 평면 y
+                if(String.valueOf(wallpaper[j]).contains("#")){
+                    xIndex.add(j);
+                }
+            }
+
+            lux = Collections.min(xIndex);
+            rdx = Collections.max(xIndex) + 1;
+            luy = Collections.min(yIndex);
+            rdy = Collections.max(yIndex) + 1;
+
+            int[] answer = {lux, luy, rdx, rdy};
+
+            return answer;
+        }
+    }
 }

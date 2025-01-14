@@ -1,5 +1,6 @@
 package programers.level1;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -134,5 +135,20 @@ class SolutionTest {
             System.out.println("Test Case " + (i + 1) + " Result: " + java.util.Arrays.toString(result) +
                     " | Expected: " + java.util.Arrays.toString(expectedResults[i]));
         }
+    }
+
+    @Test
+    void testSolution12() {
+        Solution.Solution12 solution = new Solution.Solution12();
+        Assertions.assertAll(
+                // 테스트 케이스 1
+                () -> Assertions.assertEquals(2, solution.solution(8, 4, new int[]{2, 3, 6}), "Test case 1 failed"),
+
+                // 테스트 케이스 2
+                () -> Assertions.assertEquals(1, solution.solution(5, 4, new int[]{1, 3}), "Test case 2 failed"),
+
+                // 테스트 케이스 3
+                () -> Assertions.assertEquals(4, solution.solution(4, 1, new int[]{1, 2, 3, 4}), "Test case 3 failed")
+        );
     }
 }

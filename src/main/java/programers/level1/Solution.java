@@ -539,4 +539,66 @@ public class Solution {
             return answer;
         }
     }
+
+    // 프로그래머스 level 1 덧칠하기 문제
+    public static class Solution12{
+        public int solution(int n, int m, int[] section) {
+            // n 은 벽의 길이 length
+            // m 은 롤러의 길이
+            // section 은 칠해야 하는 구역
+            // n 의 길이를 가지는 배열을 선언하고 모든 값은 1
+            // section 마다의 인덱스를 0 으로 바꿈
+            List<Integer> wallState = new ArrayList<>();
+
+            int paintCount = 0;
+
+            // 벽의 길이를 배열로 가지는 벽 상태 선언
+            for(int i = 0; i < n; i++){
+                wallState.add(1);
+            }
+
+            // 벽의 상태 배열에 칠해야 하는 부분을 0 으로 선언
+            for(int empty : section){
+                if(empty > n){
+                    break;
+                }
+                wallState.set(empty - 1, 0);
+            }
+
+            for(int i = 0; i < wallState.size(); i++){
+                if(wallState.get(i).equals(0)){
+                    // 칠해야 하는 곳을 발견 하면
+                    for(int j = 0; j < m; j++){
+                        // 롤러의 길이만큼 1로 변경
+                        if(i+j >= wallState.size()){
+                            break;
+                        }
+                        wallState.set((i+j), 1);
+                    }
+                    paintCount++;
+                    i += m - 1;
+                }
+            }
+
+            return paintCount;
+
+        }
+
+        public int advanceSolution(int n, int m, int[] section) {
+            int paintCount = 0;  // 페인트 칠 횟수
+            int currentEnd = 0;  // 현재 롤러가 도달한 마지막 위치
+
+            for (int start : section) {
+                // 롤러가 이미 해당 구역을 덮었으면 스킵
+                if (start <= currentEnd) {
+                    continue;
+                }
+                // 롤러를 새로운 위치에 배치하여 칠하기 시작
+                paintCount++;
+                currentEnd = start + m - 1;
+            }
+
+            return paintCount;
+        }
+    }
 }

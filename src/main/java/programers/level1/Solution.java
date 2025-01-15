@@ -667,4 +667,88 @@ public class Solution {
             return answer.stream().mapToInt(Integer::intValue).toArray();
         }
     }
+
+    // 프로그래머스 level 1 대충 만든 자판 문제
+    public static class Solution15{
+        public int[] solution(String[] keymap, String[] targets) {
+            // keymap 은 1번 키부터 해당 키에 할당된 문자의 순서
+            // keymap[i] 는 i+1 번 눌렀을 때의 문자. i=0 부터 시작이니까
+            // targets 는 입력하고 싶은 문자열
+            // keymap 에 있는 모든걸 순회해야겠지 그래서 i 값이 가장 작은걸 찾고
+            // 그렇게 쭉 돌아야하네
+
+            List<Integer> answer = new ArrayList<>();
+
+            for(int l = 0; l < targets.length; l++){
+                // 타겟 배열을 순회
+                int targetLength = targets[l].length();
+                int clickCount = 0;
+                for(int i = 0; i < targetLength; i++){
+                    // 타겟 원소 길이만큼 반복해서 눌러야 하는 키 값 순회
+                    String key = String.valueOf(targets[l].charAt(i));  // 눌러야 하는 키값
+                    int minClicks = Integer.MAX_VALUE;
+                    for(int j = 0; j < keymap.length; j++){
+                        // keymap 을 순회해서 key 값을 입력할 수 있는 가장 최소 값을 찾기
+                        for(int k = 0; k < keymap[j].length(); k++){
+                            // keymap 각 원소 길이 만큼 반복해서 타겟 키 값 버튼 찾기
+                            if(key.equals(String.valueOf(keymap[j].charAt(k)))){
+                                // 찾았으면
+                                minClicks = Math.min(minClicks, k + 1);
+                                break;
+                            }
+                        }
+                    }
+
+                    if(minClicks == Integer.MAX_VALUE){
+                        // 맞는 키 를 아예 못찾았으면
+                        clickCount = -1;
+                        break;
+                    }else{
+                        clickCount += minClicks;
+                    }
+                }
+
+                answer.add(l, clickCount);
+
+            }
+
+            return answer.stream().mapToInt(Integer::intValue).toArray();
+        }
+
+        public int[] advancedSolution(String[] keymap, String[] targets) {
+            // 각 문자에 대해 최소 클릭 수 저장
+            Map<Character, Integer> minClickMap = new HashMap<>();
+
+            // keymap을 순회하여 최소 클릭 수를 저장
+            for (String key : keymap) {
+                for (int i = 0; i < key.length(); i++) {
+                    char c = key.charAt(i);
+                    minClickMap.put(c, Math.min(minClickMap.getOrDefault(c, Integer.MAX_VALUE), i + 1));
+                }
+            }
+
+            List<Integer> answer = new ArrayList<>();
+
+            // targets 순회
+            for (String target : targets) {
+                int totalClicks = 0;
+                boolean isInvalid = false;
+
+                for (char c : target.toCharArray()) {
+                    if (!minClickMap.containsKey(c)) {
+                        // 문자가 keymap에 없는 경우
+                        totalClicks = -1;
+                        isInvalid = true;
+                        break;
+                    }
+                    totalClicks += minClickMap.get(c);
+                }
+
+                answer.add(isInvalid ? -1 : totalClicks);
+            }
+
+            return answer.stream().mapToInt(Integer::intValue).toArray();
+        }
+
+    }
 }

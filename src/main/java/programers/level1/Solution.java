@@ -813,4 +813,28 @@ public class Solution {
             return answer.stream().mapToInt(Integer::intValue).toArray();
         }
     }
+
+    // 프로그래머스 level 1 카드뭉치 문제
+    public class Solution17{
+        public String solution(String[] cards1, String[] cards2, String[] goal) {
+            int index1 = 0;  // cards1 인덱스
+            int index2 = 0;  // cards2 인덱스
+
+            for (String word : goal) {
+                // cards1에서 단어를 사용
+                if (index1 < cards1.length && cards1[index1].equals(word)) {
+                    index1++;
+                }
+                // cards2에서 단어를 사용
+                else if (index2 < cards2.length && cards2[index2].equals(word)) {
+                    index2++;
+                }
+                // 두 카드 뭉치에 없는 단어거나 순서가 맞지 않으면 "No"
+                else {
+                    return "No";
+                }
+            }
+            return "Yes";
+        }
+    }
 }

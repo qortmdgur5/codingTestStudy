@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Solution {
     // 프로그래머스 Level 1 동영상 편집기 문제
@@ -878,6 +877,26 @@ public class Solution {
             }
 
             return result.toString();
+        }
+    }
+
+    // 프로그래머스 level 1 크기가 작은 부분 문자열 문제
+    public class Solution19{
+        public int solution(String t, String p) {
+            int pLength = p.length();
+            int tLength = t.length();
+            int result = 0;
+
+            // t에서 길이가 p와 같은 부분문자열을 하나씩 가져와서 바로 비교
+            for (int i = 0; i <= tLength - pLength; i++) {
+                String sub = t.substring(i, i + pLength);
+                // 부분문자열 sub와 p를 비교
+                if (sub.compareTo(p) <= 0) {
+                    result++;
+                }
+            }
+
+            return result;
         }
     }
 }

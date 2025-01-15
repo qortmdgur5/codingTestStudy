@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Solution {
     // 프로그래머스 Level 1 동영상 편집기 문제
@@ -835,6 +836,48 @@ public class Solution {
                 }
             }
             return "Yes";
+        }
+    }
+
+    // 프로그래머스 level 1 둘만의 암호 문제
+    public class Solution18{
+        public String solution(String s, String skip, int index) {
+            // s 는 문자열
+            // skip 은 세지 않을 문자열
+            // index 는 점프할 거리
+            // skip 에 포함된 알파벳은 s 에 없음. 이거 중요!!
+            // a - 97 z - 122
+
+            // skip Set 으로 초기화
+            Set<Character> skipSet = new HashSet<>();
+            for(char ch : skip.toCharArray()){
+                skipSet.add(ch);
+            }
+
+            StringBuilder result = new StringBuilder();
+
+            // s 에 대해 반복 순환문 돌려야지
+            for(char ch : s.toCharArray()){
+                int count = 0;  // 알파벳을 넘을 때 마다 카운트
+                char current = ch;
+
+                // count < index 일때 반복
+                while(count < index){
+                    current++;
+                    if(current > 'z'){
+                        current = 'a';   // z 를 넘어가면 a로 바꿔줘야 함.
+                    }
+
+                    if(!skipSet.contains(current)){
+                        // skip 안해줘도 되면 증가를 제대로 한거지 카운트 증가
+                        count++;
+                    }
+                }
+
+                result.append(current);
+            }
+
+            return result.toString();
         }
     }
 }

@@ -751,4 +751,66 @@ public class Solution {
         }
 
     }
+
+    // 프로그래머스 2022 KAKAO BLIND RECRUITMENT 신고 결과 받기 문제
+    public class Solution16{
+        public int[] solution(String[] id_list, String[] report, int k) {
+            // 각 유저는 한번에 한명의 유저를 신고
+            // 신고 횟수 제한 X
+            // 한 유저를 여러번 신고 O
+            // but, 동일 유저에 대한 신고 횟수는 1회로 처리
+            // k 번 이상 신고된 유저는 게시판 이용 정지
+            // 해당 유저를 신고한 유저에게 정시 사실 메일 발송
+            // 이용자의 ID가 담긴 문자열 배열 id_list
+            // 각 이용자가 신고한 이용자의 ID 정보가 담긴 문자열 배열 report
+            // 신고한 사람과 신고당한 사람의 report 가 있으니까 Map 으로 만들고
+            // 다른 Map 으로 key 에 해당하는 유저가 몇번 신고당했는지 저장
+
+            Map<String, Integer> reportedMap = new HashMap<>();
+            Map<String, List<String>> reportMap = new HashMap<>();
+            for(int i = 0; i < report.length; i++){
+                String[] reportPart = report[i].split(" ");
+                String reporter = reportPart[0];    // 신고한 사람
+                String reported = reportPart[1];    // 신고 당한 사람
+
+                // 신고한 사람이 누구를 신고했는지 Map 저장 - 초기화 먼저
+                reportMap.putIfAbsent(reporter, new ArrayList<>());
+
+                // 여러 번 신고했더라도 내가 신고한 사람들 리스트 에는 1번만 들어가야함
+                if(!reportMap.get(reporter).contains(reported)){
+                    reportMap.get(reporter).add(reported);
+
+                    // 신고 당한 사람이 총 몇번 신고당했는지 Map 저장
+                    reportedMap.put(reported, reportedMap.getOrDefault(reported, 0) + 1);
+                }
+            }
+
+            List<Integer> answer = new ArrayList<>();
+
+            // 아이디를 먼저 순환해보자
+            for(int i = 0; i < id_list.length; i++){
+                // 각 아이디가 신고한 사람들을 조회해야지
+                List<String> myReport = reportMap.get(id_list[i]);
+                int receiveMailCount = 0;
+
+                if(myReport == null){
+                    // 내가 신고한 사람이 아예 없다면
+                    answer.add(i, receiveMailCount);
+                    continue;
+                }
+
+                // 내가 신고한 사람들의 신고당한 횟수가 k 이상인지 확인
+                for(int j = 0; j < myReport.size(); j++){
+                    int reportedCount = reportedMap.getOrDefault(myReport.get(j), 0);   // 내가 신고한 사람의 신고 횟수
+                    if(reportedCount >= k){
+                        // k 번 이상 신고를 당했다면 나에게 메일을 발송 해야한다.
+                        receiveMailCount++;
+                    }
+                }
+                answer.add(i, receiveMailCount);
+
+            }
+            return answer.stream().mapToInt(Integer::intValue).toArray();
+        }
+    }
 }

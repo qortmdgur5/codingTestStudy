@@ -899,4 +899,82 @@ public class Solution {
             return result;
         }
     }
+
+    // 프로그래머스 level 1 햄버거 만들기 문제
+    public class Solution20{
+        public int solution(int[] ingredient) {
+            int burgerCount = 0;
+
+            // 재료들을 저장할 리스트
+            List<Integer> ingreList = new ArrayList<>();
+
+            for (int i = 0; i < ingredient.length; i++) {
+                ingreList.add(ingredient[i]);   // 재료를 하나하나 담음
+
+                // 재료가 4개 이상 쌓였을 때
+                if (ingreList.size() >= 4) {
+                    int size = ingreList.size();
+
+                    // 마지막 4개의 재료가 1, 2, 3, 1 순서인지 확인
+                    if (ingreList.get(size - 4) == 1 &&
+                            ingreList.get(size - 3) == 2 &&
+                            ingreList.get(size - 2) == 3 &&
+                            ingreList.get(size - 1) == 1) {
+
+                        burgerCount++;  // 버거 하나 만들기
+
+                        // 4개의 재료를 제거
+                        ingreList.subList(size - 4, size).clear();
+                    }
+                }
+            }
+
+            return burgerCount;
+        }
+    }
+
+    public class test{
+        public int solution(int[] ingredient) {
+            // (아래서부터, 빵 – 야채 – 고기 - 빵)
+            // ingredient의 원소는 1, 2, 3 중 하나의 값이며, 순서대로 빵, 야채, 고기
+            // 1개의 버거를 만들기 위해 필요한 원소는 1 2 3 1 입니다.
+            // 순서대로여야 함.
+            // 만약 반복문을 돌려서 해당 순서를 찾고 해당 인덱스를 빼고
+            // 다시 무한으로 돌린다면 매우 메모리가 많이 들텐데
+            // 최적화 방안이 없을려나
+
+            int burgerCount = 0;
+            boolean make = true;
+
+            List<Integer> ingreList = new ArrayList<>();
+
+            for(int ingre : ingredient){
+                ingreList.add(ingre);
+            }
+
+            // System.out.println(ingreList.size());
+            while(make){
+                // 아직 만들수 있을때 까지만 반복
+                for(int i = 0; i < ingreList.size(); i ++){
+                    int inside = ingreList.get(i); // 재료
+                    if(inside == 1 && i < (ingreList.size() - 3)){
+                        // 찾은 재료가 빵이고 뒤에 존재하는 재료의 갯수가 3개가 더 있으면
+                        if(ingreList.get(i + 1) == 2 && ingreList.get(i + 2) == 3 && ingreList.get(i + 3) == 1){
+                            // 뒤에 재료가 올바르다면
+                            burgerCount++;  // 버거 1개 제조
+                            ingreList.subList(i, i + 3).clear();   // 버거 만든 속재료 없애고
+                        }else{
+                            // 뒤에 재료가 올바르지 않다면
+                            break;
+                        }
+                    }else{
+                        make = false;
+                    }
+                }
+            }
+
+            // System.out.println(ingredient.length);
+            return burgerCount;
+        }
+    }
 }

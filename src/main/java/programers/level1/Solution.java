@@ -933,48 +933,36 @@ public class Solution {
         }
     }
 
-    public class test{
-        public int solution(int[] ingredient) {
-            // (아래서부터, 빵 – 야채 – 고기 - 빵)
-            // ingredient의 원소는 1, 2, 3 중 하나의 값이며, 순서대로 빵, 야채, 고기
-            // 1개의 버거를 만들기 위해 필요한 원소는 1 2 3 1 입니다.
-            // 순서대로여야 함.
-            // 만약 반복문을 돌려서 해당 순서를 찾고 해당 인덱스를 빼고
-            // 다시 무한으로 돌린다면 매우 메모리가 많이 들텐데
-            // 최적화 방안이 없을려나
+    // 프로그래머스 level 1 명예의 전당(1) 문제
+    public class Solution21{
+        public int[] solution(int k, int[] score) {
+            // 상위 k 번째 이내이면 해당 점수를 명예의 전당 목록에 올림
+            // int k 는 명예의 전당 최대 순위 3 이면 3위까지만 명예의 전당에 올라감
+            // score[] 는 매일매일의 점수 배열
+            int[] result = new int[score.length];
 
-            int burgerCount = 0;
-            boolean make = true;
+            List<Integer> good = new ArrayList<>();
 
-            List<Integer> ingreList = new ArrayList<>();
-
-            for(int ingre : ingredient){
-                ingreList.add(ingre);
-            }
-
-            // System.out.println(ingreList.size());
-            while(make){
-                // 아직 만들수 있을때 까지만 반복
-                for(int i = 0; i < ingreList.size(); i ++){
-                    int inside = ingreList.get(i); // 재료
-                    if(inside == 1 && i < (ingreList.size() - 3)){
-                        // 찾은 재료가 빵이고 뒤에 존재하는 재료의 갯수가 3개가 더 있으면
-                        if(ingreList.get(i + 1) == 2 && ingreList.get(i + 2) == 3 && ingreList.get(i + 3) == 1){
-                            // 뒤에 재료가 올바르다면
-                            burgerCount++;  // 버거 1개 제조
-                            ingreList.subList(i, i + 3).clear();   // 버거 만든 속재료 없애고
-                        }else{
-                            // 뒤에 재료가 올바르지 않다면
-                            break;
-                        }
-                    }else{
-                        make = false;
+            for(int i = 0; i < score.length; i++){
+                // 스코어 배열을 순회
+                if(good.size() < k){
+                    // k 일 전에는 무조건 추가
+                    good.add(score[i]);
+                }else{
+                    // k 일 이후 - 순위 변동
+                    int minScore = Collections.min(good);
+                    if(score[i] > minScore){
+                        // 오늘의 점수가 명예의 전당의 최소 점수보다 높으면
+                        good.remove(Integer.valueOf(minScore));
+                        good.add(score[i]);
                     }
                 }
+
+                // 최솟값을 계속 저장
+                result[i] = Collections.min(good);
             }
 
-            // System.out.println(ingredient.length);
-            return burgerCount;
+            return result;
         }
     }
 }

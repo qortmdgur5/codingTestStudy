@@ -965,4 +965,29 @@ public class Solution {
             return result;
         }
     }
+
+    // 프로그래머스 level 1 기사단원의 무기 문제
+    public class Solution22{
+        public int solution(int number, int limit, int power) {
+            int result = 0;
+
+            for(int i = 1; i <= number; i++){
+                // number 만큼 반복
+                int count = 0;
+                for(int j = 1; j * j <= i; j++){
+                    // 각 기사들의 약수 구하기
+                    if(i%j == 0){
+                        // j 가 i 의 약수라면
+                        count++;
+                        if(j != i/j){
+                            // 짝이 되는 약수가 제곱수로서 중복 카운팅 방지
+                            count++;
+                        }
+                    }
+                }
+                result += (count > limit) ? power : count;
+            }
+            return result;
+        }
+    }
 }
